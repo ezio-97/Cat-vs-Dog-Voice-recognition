@@ -17,7 +17,7 @@
 # Additional python packages installed so far
 
 * Desly- sounddevice, EnergyVAD , soundfile
-* Mari- 
+* Marie- 
 
 
 # Best practices
