@@ -5,15 +5,51 @@
 
 * Load the wav files in from a root directory.
 * Function to check for the total length of the two classs in seconds and their bitrates.
-* Tried to get rid of long pauses using Energy VAD (Doesnt work and not sure if we should follow this approach).
+* Tried to get rid of long pauses using Energy VAD (Doesnt work and not sure if we should follow this approach). 
 * If we find the average length of all the wavs, maybe we can randomly sample that duration from different instances of all the examples and then do a Mel-Coeficient analysis to generate the final feature vectors?
  -Update: Found the Mel-coeficients using a fixed frame length ad overlap sample. Maybe we can look into the average length after an initial training and validation of our model.
 
 # To-Do(feel free to add all your thoughts and suggestions)
 
 * The total duration of cats are double than dogs. Find possible mitigations for that.
-* Implement a noise redutction function and save the cleaned audio files in a folder in the repo.(Can also be used directly in the pipeline without saving to reduce complexity and save space!) Instead of noise reduction, we could also add gaussian white noise to all samples, that would also negate the background noise influence
-* maybe we should add an amplitude averaging preprocessing, some of the wavs are pretty quiet
+* Implement a noise redutction function and save the cleaned audio files in a folder in the repo.(Can also be used directly in the pipeline without saving to reduce complexity and save space!) Instead of noise reduction, we could also add gaussian white noise to all samples, that would also negate the background noise influence something like this maybe:
+* Generating white noise file (has to be done for every new file, else all files would have the same 
+pip install numpy
+pip install scipy
+
+import numpy as np
+from scipy.io.wavfile import write
+
+# Parameters
+sample_rate = 44100  # Sample rate in Hz
+duration = 5  # Duration of the white noise in seconds
+
+# Generate white noise
+noise = np.random.normal(0, 1, sample_rate * duration)
+
+# Normalize the white noise
+noise = noise / np.max(np.abs(noise))
+
+# Convert the white noise to a 16-bit format
+noise = (noise * 2**15).astype(np.int32)
+
+# Save the white noise as a .wav file
+write('white_noise.wav', sample_rate, noise
+
+*add noise to cat/dog wav
+import numpy as np
+from scikits.audiolab import wavread, wavwrite
+
+data1, fs1, enc1 = wavread("file1.wav")
+data2, fs2, enc2 = wavread("file2.wav") #this would be the noise file 
+
+assert fs1 == fs2 #im not sure if we need those two, hopefully we manage to write the same sample rate into the noise file and the encoding hopefully also matches
+assert enc1 == enc2
+result = 0.9 * data1 + 0.1 * data2  #this would be noticable level of noise i believe, maybe we have to test (0.99 to 0.01)
+
+wavwrite(result, 'result.wav')
+
+* maybe we should add an amplitude averaging preprocessing, some of the wavs are pretty quiet // Normalization
 * Research on the best NN architecture for training.
 
 # Additional python packages installed so far
