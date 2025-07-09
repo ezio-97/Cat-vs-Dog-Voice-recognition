@@ -11,6 +11,9 @@
 
 # To-Do(feel free to add all your thoughts and suggestions)
 
+*There seems to also be a mfcc function built into librosa:  
+    mfccs = librosa.feature.mfcc(y=audio, sr=22050, n_mfcc=40)
+    mfccs_scaled = np.mean(mfccs.T, axis=0)
 * The total duration of cats are double than dogs. Find possible mitigations for that.
 * Implement a noise redutction function and save the cleaned audio files in a folder in the repo.(Can also be used directly in the pipeline without saving to reduce complexity and save space!) Instead of noise reduction, we could also add gaussian white noise to all samples, that would also negate the background noise influence something like this maybe:
 * Generating white noise file (has to be done for every new file, else all files would have the same 
