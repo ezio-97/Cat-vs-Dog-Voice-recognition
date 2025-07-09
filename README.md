@@ -11,7 +11,7 @@
 
 # To-Do(feel free to add all your thoughts and suggestions)
 
-*There seems to also be a mfcc function built into librosa:  
+*There seems to also be a mfcc function built into librosa I an not sure however what other preprocessing is in there (eg preemphasizing):  
     mfccs = librosa.feature.mfcc(y=audio, sr=22050, n_mfcc=40)
     mfccs_scaled = np.mean(mfccs.T, axis=0)
 * The total duration of cats are double than dogs. Find possible mitigations for that.
@@ -53,7 +53,7 @@ result = 0.9 * data1 + 0.1 * data2  #this would be noticable level of noise i be
 wavwrite(result, 'result.wav')
 
 * maybe we should add an amplitude averaging preprocessing, some of the wavs are pretty quiet // Normalization
-* Research on the best NN architecture for training.
+* Research on the best NN architecture for training. This paper   Enhancing Audio Classification Through MFCC Feature Extraction and Data Augmentation with CNN and RNN Models by Karim Mohammed Rezau, Md. Jewe, Md Shabiul Islam, Kazy Noor e Alam Siddiquee, Nick Barua, Muhammad Azizur Rahman, Mohammad Shan-A-Khuda, Rejwan Bin Sulaiman, Md Sadeque Imam Shaikh, Md Abrar Hamim1 F.M Tanmoy, Afraz Ul Haque, Musarrat Saberin Nipun, Navid Dorudian, Amer Kareem  is quite nice. They also only used mfccs and tried out different CNNs and RNNs depending on dataset size. This could be really helpful for us.
 
 # Additional python packages installed so far
 
