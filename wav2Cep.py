@@ -4,7 +4,7 @@ import random
 from scipy.fftpack import dct
 
 
-def compute_2D_mfcc(file, frameSize, CepCoeficients, segment_duration, max_frames):
+def compute_2D_mfcc(file, frameSize, CepCoeficients, segment_duration=None  , max_frames=None):
 
     """
     samples random audio according to segment_duration from the original wav
@@ -16,15 +16,18 @@ def compute_2D_mfcc(file, frameSize, CepCoeficients, segment_duration, max_frame
 
    ###############################(Random Sampling)##########################################
     # Convert segment duration (in seconds) to samples 
-    segment_len = int(segment_duration * sr)
+    if segment_duration == None:
+        print("Using the complete audio")
+        y = y_ini
 
-    # Choose a random start point ensuring it doesn't exceed bounds
-    if len(y_ini) > segment_len:
-        start = random.randint(0, len(y_ini) - segment_len)
-        y = y_ini[start:start + segment_len]
     else:
-        print("Using full audio")
-        y = y_ini  # Use whole audio if it's shorter than segment_len
+        segment_len = int(segment_duration * sr)
+        # Choose a random start point ensuring it doesn't exceed bounds
+        if len(y_ini) > segment_len:
+            start = random.randint(0, len(y_ini) - segment_len)
+            y = y_ini[start:start + segment_len]
+        else:
+            y = y_ini  # Use whole audio if it's shorter than segment_len
 
     #######################################
     pre_emphasis = 0.97 #pre emphasising higher freq
@@ -77,6 +80,11 @@ def compute_2D_mfcc(file, frameSize, CepCoeficients, segment_duration, max_frame
     num_ceps = CepCoeficients #discrete cosine transform (DCT) to convert mel spectrum into mel cespstral coefficients
     mfcc = dct(filter_banks, type=2, axis=1, norm='ortho')[:, :num_ceps]
 
+
+    
+    if max_frames == None:
+        print("No Max frame selected. Returning the omplete farmes from the audio segment")
+        return mfcc
 
     # Pad or truncate MFCC matrix to max_len frames
     if mfcc.shape[0] < max_frames:
@@ -88,14 +96,28 @@ def compute_2D_mfcc(file, frameSize, CepCoeficients, segment_duration, max_frame
     return mfcc
 
 
-def compute_mfcc(file, frameSize, CepCoeficients):
+def compute_mfcc(file, frameSize, CepCoeficients, segment_duration=None):
     
     """
     takes the full audio and outputs random (m_frames * cepCoeficients)
     
     """
-    y, sr = librosa.load(file, sr=None)       #load signal
+    y_ini, sr = librosa.load(file, sr=None)       #load signal
 
+    if segment_duration == None:
+        print("Using the complete audio")
+        y = y_ini
+    else:
+        segment_len = int(segment_duration * sr)
+        # Choose a random start point ensuring it doesn't exceed bounds
+        if len(y_ini) > segment_len:
+            start = random.randint(0, len(y_ini) - segment_len)
+            y = y_ini[start:start + segment_len]
+        else:
+            print("Using full audio")
+            y = y_ini  # Use whole audio if it's shorter than segment_len
+
+    
     #######################################
     pre_emphasis = 0.97 #pre emphasising higher freq
     y_preemphasized = np.append(y[0], y[1:] - pre_emphasis * y[:-1])
@@ -146,4 +168,5 @@ def compute_mfcc(file, frameSize, CepCoeficients):
     ######################################################################################
     num_ceps = CepCoeficients #discrete cosine transform (DCT) to convert mel spectrum into mel cespstral coefficients
     mfcc = dct(filter_banks, type=2, axis=1, norm='ortho')[:, :num_ceps]
+
     return mfcc
