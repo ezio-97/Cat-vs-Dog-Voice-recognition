@@ -4,7 +4,7 @@ import random
 from scipy.fftpack import dct
 
 
-def compute_2D_mfcc(file, frameSize, CepCoeficients, segment_duration=None  , max_frames=None):
+def compute_2D_mfcc(file, frameSize, CepCoeficients, random_segment_duration=None, max_frames=None):
 
     """
     samples random audio according to segment_duration from the original wav
@@ -16,12 +16,12 @@ def compute_2D_mfcc(file, frameSize, CepCoeficients, segment_duration=None  , ma
 
    ###############################(Random Sampling)##########################################
     # Convert segment duration (in seconds) to samples 
-    if segment_duration == None:
+    if random_segment_duration == None:
         print("Using the complete audio")
         y = y_ini
 
     else:
-        segment_len = int(segment_duration * sr)
+        segment_len = int(random_segment_duration * sr)
         # Choose a random start point ensuring it doesn't exceed bounds
         if len(y_ini) > segment_len:
             start = random.randint(0, len(y_ini) - segment_len)
@@ -83,7 +83,7 @@ def compute_2D_mfcc(file, frameSize, CepCoeficients, segment_duration=None  , ma
 
     
     if max_frames == None:
-        print("No Max frame selected. Returning the omplete farmes from the audio segment")
+        print("No Max frame selected. Returning the complete frames from the audio segment")
         return mfcc
 
     # Pad or truncate MFCC matrix to max_len frames
@@ -96,7 +96,7 @@ def compute_2D_mfcc(file, frameSize, CepCoeficients, segment_duration=None  , ma
     return mfcc
 
 
-def compute_mfcc(file, frameSize, CepCoeficients, segment_duration=None):
+def compute_mfcc(file, frameSize, CepCoeficients, random_segment_duration=None):
     
     """
     takes the full audio and outputs random (m_frames * cepCoeficients)
@@ -104,11 +104,11 @@ def compute_mfcc(file, frameSize, CepCoeficients, segment_duration=None):
     """
     y_ini, sr = librosa.load(file, sr=None)       #load signal
 
-    if segment_duration == None:
+    if random_segment_duration == None:
         print("Using the complete audio")
         y = y_ini
     else:
-        segment_len = int(segment_duration * sr)
+        segment_len = int(random_segment_duration * sr)
         # Choose a random start point ensuring it doesn't exceed bounds
         if len(y_ini) > segment_len:
             start = random.randint(0, len(y_ini) - segment_len)
