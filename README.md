@@ -6,16 +6,18 @@
 * Load the wav files in from a root directory.
 * Function to check for the total length of the two classs in seconds and their bitrates.
 * Tried to get rid of long pauses using Energy VAD (Doesnt work and not sure if we should follow this approach). 
-* If we find the average length of all the wavs, maybe we can randomly sample that duration from different instances of all the examples and then do a Mel-Coeficient analysis to generate the final feature vectors?
- -Update: Found the Mel-coeficients using a fixed frame length ad overlap sample. Maybe we can look into the average length after an initial training and validation of our model.
+* If we find the average length of all the wavs, maybe we can randomly sample that duration from different instances of all   the examples and then do a Mel-Coeficient analysis to generate the final feature vectors? (-Done and works quite well for both vanilla and CNN approach.)
+
+ * Research on the best NN architecture for training. This paper   "Enhancing Audio Classification Through MFCC Feature Extraction and Data Augmentation with CNN and RNN Models by Karim Mohammed Rezau, Md. Jewe, Md Shabiul Islam, Kazy Noor e Alam Siddiquee, Nick Barua, Muhammad Azizur Rahman, Mohammad Shan-A-Khuda, Rejwan Bin Sulaiman, Md Sadeque Imam Shaikh, Md Abrar Hamim1 F.M Tanmoy, Afraz Ul Haque, Musarrat Saberin Nipun, Navid Dorudian, Amer Kareem"  is quite nice. They also only used mfccs and tried out different CNNs and RNNs depending on dataset size. This could be really helpful for us.
+
+ "~Desly: So I have used a very simple CNN model in our case and works quite well for our dataset. Maybe there is no further need now for the sae of the presentation to go so much in depth?"
 
 # To-Do(feel free to add all your thoughts and suggestions)
 
-*There seems to also be a mfcc function built into librosa I an not sure however what other preprocessing is in there (eg preemphasizing):  
-    mfccs = librosa.feature.mfcc(y=audio, sr=22050, n_mfcc=40)
-    mfccs_scaled = np.mean(mfccs.T, axis=0)
+* There seems to also be a mfcc function built into librosa I an not sure however what other preprocessing is in there (eg preemphasizing): 
+    "~Desly: I have decided to keep our original script because it seems to be doing the same thing and is better for comparisons sake."
 * The total duration of cats are double than dogs. Find possible mitigations for that.
-* Implement a noise redutction function and save the cleaned audio files in a folder in the repo.(Can also be used directly in the pipeline without saving to reduce complexity and save space!) Instead of noise reduction, we could also add gaussian white noise to all samples, that would also negate the background noise influence something like this maybe:
+* Implement a noise reduction function and save the cleaned audio files in a folder in the repo.(Can also be used directly in the pipeline without saving to reduce complexity and save space!) Instead of noise reduction, we could also add gaussian white noise to all samples, that would also negate the background noise influence something like this maybe:
 * Generating white noise file (has to be done for every new file, else all files would have the same 
 pip install numpy
 pip install scipy
@@ -53,7 +55,7 @@ result = 0.9 * data1 + 0.1 * data2  #this would be noticable level of noise i be
 wavwrite(result, 'result.wav')
 
 * maybe we should add an amplitude averaging preprocessing, some of the wavs are pretty quiet // Normalization
-* Research on the best NN architecture for training. This paper   Enhancing Audio Classification Through MFCC Feature Extraction and Data Augmentation with CNN and RNN Models by Karim Mohammed Rezau, Md. Jewe, Md Shabiul Islam, Kazy Noor e Alam Siddiquee, Nick Barua, Muhammad Azizur Rahman, Mohammad Shan-A-Khuda, Rejwan Bin Sulaiman, Md Sadeque Imam Shaikh, Md Abrar Hamim1 F.M Tanmoy, Afraz Ul Haque, Musarrat Saberin Nipun, Navid Dorudian, Amer Kareem  is quite nice. They also only used mfccs and tried out different CNNs and RNNs depending on dataset size. This could be really helpful for us.
+
 
 # Additional python packages installed so far
 
